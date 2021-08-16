@@ -12,6 +12,7 @@ import (
 	"golang.org/x/text/runes"
 	"golang.org/x/text/transform"
 	"golang.org/x/text/unicode/norm"
+	"gonum.org/v1/gonum/mat"
 )
 
 var X []string
@@ -19,6 +20,36 @@ var y []string
 
 var YLABELS = [7]string{"greeting", "liked", "disliked", "pizza", "hamburger", "salad", "soda"}
 var VOCABULARY = [27]string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"}
+
+var mapping = map[string]int{
+	"a": 1,
+	"b": 2,
+	"c": 3,
+	"d": 4,
+	"e": 5,
+	"f": 6,
+	"g": 7,
+	"h": 8,
+	"i": 9,
+	"j": 10,
+	"k": 11,
+	"l": 12,
+	"m": 13,
+	"n": 14,
+	"ñ": 15,
+	"o": 16,
+	"p": 17,
+	"q": 18,
+	"r": 19,
+	"s": 20,
+	"t": 21,
+	"u": 22,
+	"v": 23,
+	"w": 24,
+	"x": 25,
+	"y": 26,
+	"z": 27,
+}
 
 func read_file() {
 	file, err := os.Open("./chats")
@@ -57,10 +88,33 @@ func clear_text(text string) string {
 	return text2
 }
 
+func matPrint(X mat.Matrix) {
+	fa := mat.Formatted(X, mat.Prefix(""), mat.Squeeze())
+	fmt.Printf("%v\n", fa)
+}
+
 func data_preparation() {
 	var X_prepared []string
+
 	for i := 0; i < len(X); i++ {
 		X_prepared = append(X_prepared, clear_text(X[i]))
 	}
-	fmt.Println(X_prepared)
+
+	X := mat.NewDense(len(X_prepared), 33, nil)
+
+	for i := 0; i < len(X_prepared); i++ {
+		var sentence string = X_prepared[i]
+		var sentence_int []float64
+		for j := 0; j < len(sentence); i++ {
+			for key, value := range mapping {
+				if string(sentence[j]) == key {
+					sentence_int = append(sentence_int, float64(value))
+				}
+			}
+		}
+		X.SetRow(i, sentence_int)
+	}
+
+	println("X:")
+	matPrint(X)
 }
