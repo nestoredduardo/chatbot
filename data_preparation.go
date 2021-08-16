@@ -18,6 +18,7 @@ var X []string
 var y []string
 
 var YLABELS = [7]string{"greeting", "liked", "disliked", "pizza", "hamburger", "salad", "soda"}
+var VOCABULARY = [27]string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"}
 
 func read_file() {
 	file, err := os.Open("./chats")
@@ -44,7 +45,7 @@ func clear_text(text string) string {
 		panic(e)
 	}
 
-	reg, err := regexp.Compile("[^a-zA-Z0-9!?]+")
+	reg, err := regexp.Compile("[^a-zA-Z!?]+")
 
 	if err != nil {
 		log.Fatal(err)
@@ -52,6 +53,7 @@ func clear_text(text string) string {
 
 	text2 := reg.ReplaceAllString(output, "")
 	text2 = strings.Replace(text2, "?", "", -1)
+	text2 = strings.ToLower(text2)
 	return text2
 }
 
