@@ -5,7 +5,13 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"regexp"
 	"strings"
+	"unicode"
+
+	"golang.org/x/text/runes"
+	"golang.org/x/text/transform"
+	"golang.org/x/text/unicode/norm"
 )
 
 var X []string
@@ -31,7 +37,28 @@ func read_file() {
 	}
 }
 
-func clear_text(text string) {
-	text = strings.ReplaceAll(text, " ", "")
-	fmt.Println(text)
+func clear_text(text string) string {
+	t := transform.Chain(norm.NFD, runes.Remove(runes.In(unicode.Mn)), norm.NFC)
+	output, _, e := transform.String(t, text)
+	if e != nil {
+		panic(e)
+	}
+
+	reg, err := regexp.Compile("[^a-zA-Z0-9!?]+")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	text2 := reg.ReplaceAllString(output, "")
+	text2 = strings.Replace(text2, "?", "", -1)
+	return text2
+}
+
+func data_preparation() {
+	var X_prepared []string
+	for i := 0; i < len(X); i++ {
+		X_prepared = append(X_prepared, clear_text(X[i]))
+	}
+	fmt.Println(X_prepared)
 }
