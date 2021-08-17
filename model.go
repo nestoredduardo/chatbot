@@ -27,7 +27,9 @@ func prepare_sentence(text string) []int {
 	return sentence_int
 }
 
-func sentence_to_avg(sentence []int) float64 {
+func sentence_to_onehot() {}
+
+/* func sentence_to_avg(sentence []int) float64 {
 	var avg float64
 
 	for i := 0; i < len(sentence); i++ {
@@ -36,4 +38,4 @@ func sentence_to_avg(sentence []int) float64 {
 	avg = avg / float64(len(sentence))
 
 	return avg
-}
+} */
