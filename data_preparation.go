@@ -16,10 +16,20 @@ import (
 )
 
 var X []string
-var y []string
+var y = [28]int{1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 7}
 
-var YLABELS = [7]string{"greeting", "liked", "disliked", "pizza", "hamburger", "salad", "soda"}
-var VOCABULARY = [27]string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"}
+//var YLABELS = [7]string{"greeting", "liked", "disliked", "pizza", "hamburger", "salad", "soda"}
+//var VOCABULARY = [27]string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"}
+
+var y_mapping = map[string]int{
+	"greeting":  1,
+	"liked":     2,
+	"disliked":  3,
+	"pizza":     4,
+	"hamburger": 5,
+	"salad":     6,
+	"soda":      7,
+}
 
 var mapping = map[string]int{
 	"a": 1,
@@ -50,6 +60,8 @@ var mapping = map[string]int{
 	"y": 26,
 	"z": 27,
 }
+
+const n_columns = 28
 
 func read_file() {
 	file, err := os.Open("./chats")
@@ -100,16 +112,22 @@ func data_preparation() {
 		X_prepared = append(X_prepared, clear_text(X[i]))
 	}
 
-	X := mat.NewDense(len(X_prepared), 33, nil)
+	X := mat.NewDense(len(X_prepared), n_columns, nil)
 
 	for i := 0; i < len(X_prepared); i++ {
 		var sentence string = X_prepared[i]
 		var sentence_int []float64
-		for j := 0; j < len(sentence); i++ {
+		for j := 0; j < len(sentence); j++ {
 			for key, value := range mapping {
 				if string(sentence[j]) == key {
 					sentence_int = append(sentence_int, float64(value))
 				}
+			}
+		}
+		if len(sentence_int) < n_columns {
+			diff := n_columns - len(sentence_int)
+			for i := 0; i < diff; i++ {
+				sentence_int = append(sentence_int, 0)
 			}
 		}
 		X.SetRow(i, sentence_int)
