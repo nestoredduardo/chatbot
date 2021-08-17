@@ -16,19 +16,19 @@ import (
 )
 
 var X []string
-var y = [28]int{1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 7}
+var y = [28]int{0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6}
 
 //var YLABELS = [7]string{"greeting", "liked", "disliked", "pizza", "hamburger", "salad", "soda"}
 //var VOCABULARY = [27]string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"}
 
 var y_mapping = map[string]int{
-	"greeting":  1,
-	"liked":     2,
-	"disliked":  3,
-	"pizza":     4,
-	"hamburger": 5,
-	"salad":     6,
-	"soda":      7,
+	"greeting":  0,
+	"liked":     1,
+	"disliked":  2,
+	"pizza":     3,
+	"hamburger": 4,
+	"salad":     5,
+	"soda":      6,
 }
 
 var mapping = map[string]int{
@@ -105,7 +105,7 @@ func matPrint(X mat.Matrix) {
 	fmt.Printf("%v\n", fa)
 }
 
-func data_preparation() {
+func data_preparation() (X_train mat.Matrix, y []string) {
 	var X_prepared []string
 
 	for i := 0; i < len(X); i++ {
@@ -133,6 +133,9 @@ func data_preparation() {
 		X.SetRow(i, sentence_int)
 	}
 
+	X_train = X
+
 	println("X:")
-	matPrint(X)
+	matPrint(X_train)
+	return X_train, y
 }
